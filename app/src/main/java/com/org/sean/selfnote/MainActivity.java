@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.org.sean.selfnote.util.PathUtil;
+
 public class MainActivity extends AppCompatActivity {
     public static final String CAMERA_WAY = "camera_way";
     public static final String CAMERA_OPTION = "camera_option";
@@ -97,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TextView textView = findViewById(R.id.attention_txt);
-        String path = getResources().getString(R.string.font_camera) + "(1)：" + getAddress(1) + "\n"
-                + getResources().getString(R.string.back_camera) + "(0)：" + getAddress(0);
+        String path = getResources().getString(R.string.font_camera) + "(1)：" + PathUtil.getStoragePath(1) + "\n"
+                + getResources().getString(R.string.back_camera) + "(0)：" + PathUtil.getStoragePath(0);
         textView.setText(path);
     }
 
@@ -110,14 +112,5 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(CAMERA_SYNC, sync_switch);
         Toast.makeText(this, getResources().getString(R.string.opening), Toast.LENGTH_SHORT).show();
         startActivity(intent);
-    }
-
-    private String getAddress(int cameraId) {
-        String filePath = Environment.getExternalStorageDirectory() + "/MyCamera/";
-        if (0 == cameraId) {
-            return filePath.concat("back/");
-        } else {
-            return filePath.concat("font/");
-        }
     }
 }

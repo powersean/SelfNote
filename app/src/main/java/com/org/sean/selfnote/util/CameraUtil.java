@@ -21,7 +21,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Size;
@@ -371,7 +370,7 @@ public class CameraUtil {
                                     matrix.setRotate(cameraId == CameraCharacteristics.LENS_FACING_FRONT ? 90 : 270);
                                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                                    if (BitmapUtil.save(bitmap, getAddress() + System.currentTimeMillis() + ".jpg")) {
+                                    if (BitmapUtil.save(bitmap, PathUtil.getStoragePath(cameraId) + System.currentTimeMillis() + ".jpg")) {
                                         showToast(activity.getResources().getString(R.string.save_success));
                                     } else {
                                         showToast(activity.getResources().getString(R.string.save_failed));
@@ -404,14 +403,5 @@ public class CameraUtil {
                 Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private String getAddress() {
-        String filePath = Environment.getExternalStorageDirectory() + "/MyCamera/";
-        if (0 == cameraId) {
-            return filePath.concat("back/");
-        } else {
-            return filePath.concat("font/");
-        }
     }
 }
