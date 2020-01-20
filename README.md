@@ -1,0 +1,2 @@
+# SelfNote
+Camera example
