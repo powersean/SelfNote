@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="camera">
+        <item>单摄像头切换</item>
+        <item>双摄像头同步</item>
+    </array>
+
+    <array name="option">
+        <item>拍照</item>
+        <item>无操作</item>
+    </array>
+</resources>
