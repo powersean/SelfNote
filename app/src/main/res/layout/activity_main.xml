@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:text="@string/title"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,13 +86,34 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/sync"
+        android:id="@+id/infrared_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/light"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
-        android:visibility="gone">
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/open_infrared_light"
+            android:textSize="16sp" />
+
+        <Switch
+            android:id="@+id/switch_infrared_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/infrared_light"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -109,11 +130,41 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/face"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sync"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/face_det_control"
+            android:textSize="16sp" />
+
+        <Switch
+            android:id="@+id/switch_face"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:checked="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@string/warning_face" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/open"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/sync"
+        android:layout_below="@id/face"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="50dp"
         android:layout_marginRight="40dp"

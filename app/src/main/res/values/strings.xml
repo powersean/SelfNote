@@ -4,11 +4,13 @@
     <string name="choose_camera">测试对象：</string>
     <string name="choose_option">选择操作方式：</string>
     <string name="open_light">是否自动开启补光灯：</string>
+    <string name="open_infrared_light">是否自动开启红外灯：</string>
     <string name="keep_sync">拍摄是否同步控制：</string>
+    <string name="face_det_control">人脸检测控制：</string>
     <string name="open">启动</string>
     <string name="opening">正在启动，请稍后...</string>
-    <string name="font_camera">前置摄像头</string>
-    <string name="back_camera">后置摄像头</string>
+    <string name="font_camera">正常摄像头</string>
+    <string name="back_camera">红外摄像头</string>
     <string name="not_scope">没有开启摄像头相关权限</string>
     <string name="not_support">没有检测到摄像头，请检查硬件连接...</string>
     <string name="init_error">摄像头初始化失败:</string>
@@ -21,4 +23,5 @@
     <string name="ob_scope_write">正在获取读写权限</string>
     <string name="scope_write_bid">读写权限被禁止</string>
     <string name="storage_address">存储路径</string>
+    <string name="warning_face">(注意使用此功能必须要重写人脸检测类，否则初始化会失败，存在卡死现象！)</string>
 </resources>

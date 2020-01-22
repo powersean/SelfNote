@@ -23,6 +23,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.util.Size;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,6 +32,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.hanvon.cameralight.CameraDetectManager;
+import com.hanvon.cameralight.CommonListener;
+import com.hanvon.cameralight.FaceDetectListener;
+import com.hanvon.light.Light;
 import com.org.sean.selfnote.R;
 
 import java.io.IOException;
@@ -45,6 +50,9 @@ import java.util.Arrays;
  * </pre>
  */
 public class CameraUtil {
+    private static final String TAG = "CameraActivity";
+    private final int canLightChannel = 1;//设置红外通道
+
     private Activity activity;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
@@ -59,6 +67,9 @@ public class CameraUtil {
     private ImageReader imageReader;
     private Size previewSize;
     private boolean openLight;
+    private boolean openInfraredLight = true;
+    private CameraDetectManager cameraDetectManager;
+    private boolean openFaceDet = false;
 
 
     public CameraUtil(@NonNull Activity activity, @NonNull SurfaceView surfaceView, @NonNull int cameraId, @NonNull boolean openLight) {
@@ -66,6 +77,16 @@ public class CameraUtil {
         this.surfaceView = surfaceView;
         this.cameraId = cameraId;
         this.openLight = openLight;
+    }
+
+    public CameraUtil setInfraredLight(boolean openInfraredLight) {
+        this.openInfraredLight = openInfraredLight;
+        return this;
+    }
+
+    public CameraUtil setFaceDet(boolean openFaceDet) {
+        this.openFaceDet = openFaceDet;
+        return this;
     }
 
     public void run() {
@@ -182,6 +203,41 @@ public class CameraUtil {
     }
 
     /**
+     * 相机探测初始化
+     */
+    private void initCameraLight() {
+        cameraDetectManager = new CameraDetectManager(activity);
+        cameraDetectManager.setDelayTime(10 * 1000);
+        cameraDetectManager.setVisibleDetectThreshold(50);
+        cameraDetectManager.init(new CommonListener() {
+            @Override
+            public void success() {
+                Light.openInfrared();
+                Log.e(TAG, "success");
+            }
+
+            @Override
+            public void fail() {
+                Log.e(TAG, "fail");
+                cameraDetectManager.release();
+            }
+        }, new FaceDetectListener() {
+            @Override
+            public void success() {
+                //检测到人脸
+                Log.e(TAG, "detectSuccess");
+                Light.open();
+            }
+
+            @Override
+            public void fail() {
+                Log.e(TAG, "detectFail");
+            }
+
+        });
+    }
+
+    /**
      * 打开相机
      */
     private void openCamera() {
@@ -235,6 +291,8 @@ public class CameraUtil {
             handler.removeCallbacksAndMessages(null);
             handler = null;
         }
+        Light.closeInfrared();
+        Light.close();
     }
 
     /**
@@ -314,11 +372,13 @@ public class CameraUtil {
         try {
             previewBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             lightSwitch(previewBuilder, openLight);
-            //设置预览数据输出界面
-            previewBuilder.addTarget(surfaceHolder.getSurface());
-            //创建相机捕获会话，
-            //第一个参数是捕获数据的输出Surface列表，第二个参数是CameraCaptureSession状态回调接口，第三个参数是在哪个线程(null是当前线程)
-            cameraDevice.createCaptureSession(Arrays.asList(surfaceHolder.getSurface(), imageReader.getSurface()), sessionStateCallback, handler);
+            if (cameraDevice != null){
+                //设置预览数据输出界面
+                previewBuilder.addTarget(surfaceHolder.getSurface());
+                //创建相机捕获会话，
+                //第一个参数是捕获数据的输出Surface列表，第二个参数是CameraCaptureSession状态回调接口，第三个参数是在哪个线程(null是当前线程)
+                cameraDevice.createCaptureSession(Arrays.asList(surfaceHolder.getSurface(), imageReader.getSurface()), sessionStateCallback, handler);
+            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -392,6 +452,16 @@ public class CameraUtil {
 
     private void lightSwitch(CaptureRequest.Builder builder, boolean open) {
         if (builder != null) {
+            if (open) {
+                Light.open();
+            } else {
+                Light.close();
+            }
+            if (openInfraredLight){
+                Light.openInfrared();
+            } else{
+                Light.closeInfrared();
+            }
             builder.set(CaptureRequest.FLASH_MODE, open ? CaptureRequest.FLASH_MODE_TORCH : CaptureRequest.FLASH_MODE_OFF);
         }
     }

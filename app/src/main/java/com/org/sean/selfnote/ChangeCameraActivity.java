@@ -26,6 +26,7 @@ public class ChangeCameraActivity extends AppCompatActivity implements View.OnCl
     private int cameraWay;
     private boolean isOpenLight;
     private boolean isSync;
+    private boolean isInfrafed;
     private List<CameraUtil> cameraUtils = new ArrayList<>();
     private int count;
 
@@ -63,6 +64,7 @@ public class ChangeCameraActivity extends AppCompatActivity implements View.OnCl
         changeCamera.setOnClickListener(this);
         isOpenLight = intent.getBooleanExtra(MainActivity.CAMERA_LIGHT, true);
         isSync = intent.getBooleanExtra(MainActivity.CAMERA_SYNC, true);
+        isInfrafed = intent.getBooleanExtra(MainActivity.CAMERA_INFRARED, true);
     }
 
     private void initCamera() {
@@ -70,16 +72,16 @@ public class ChangeCameraActivity extends AppCompatActivity implements View.OnCl
             SurfaceView surfaceView = findViewById(R.id.surfaceView);
             CameraUtil cameraUtil = new CameraUtil(this, surfaceView, 0, isOpenLight);
             cameraUtils.add(cameraUtil);
-            cameraUtil.run();
+            cameraUtil.setInfraredLight(isInfrafed).run();
         } else {
             SurfaceView surfaceView1 = findViewById(R.id.surfaceview1);
-            CameraUtil cameraUtil1 = new CameraUtil(this, surfaceView1, 1, isOpenLight);
+            CameraUtil cameraUtil1 = new CameraUtil(this, surfaceView1, 0, isOpenLight);
             cameraUtils.add(cameraUtil1);
-            cameraUtil1.run();
+            cameraUtil1.setInfraredLight(isInfrafed).run();
             SurfaceView surfaceView2 = findViewById(R.id.surfaceview2);
-            CameraUtil cameraUtil2 = new CameraUtil(this, surfaceView2, 0, isOpenLight);
+            CameraUtil cameraUtil2 = new CameraUtil(this, surfaceView2, 1, isOpenLight);
             cameraUtils.add(cameraUtil2);
-            cameraUtil2.run();
+            cameraUtil2.setInfraredLight(isInfrafed).run();
         }
     }
 
